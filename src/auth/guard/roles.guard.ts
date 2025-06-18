@@ -18,13 +18,14 @@ export class RolesGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+
     const request = context.switchToHttp().getRequest();
 
     if (!Boolean(roles)) {
       return true;
     }
 
-    if (!roles.includes(request.user.role)) {
+    if (!roles.includes(request.user.roles)) {
       throw new ForbiddenException(
         'Недостаточно прав. У вас нет прав доступа к этому ресурсу',
       );

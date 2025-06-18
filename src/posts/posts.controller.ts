@@ -12,6 +12,7 @@ import {
 
 import { Authorization } from '@/auth/decorators/auth.decorator';
 import { Authorized } from '@/auth/decorators/autorized.decorator';
+import { canUserModifyPost } from '@/libs/common/utils/validate-access-post.util';
 import { UserRole } from '@/users/entities/user.entity';
 
 import { CreatePostDto } from './dto/create-post.dto';
@@ -27,8 +28,10 @@ export class PostsController {
   @Post()
   async create(
     @Authorized('id') userId: string,
+    @Authorized('roles') roles: UserRole[],
     @Body() createPostDto: CreatePostDto,
   ): Promise<PostEntity> {
+
     return this.postsService.create(createPostDto, +userId);
   }
 
@@ -66,15 +69,9 @@ export class PostsController {
     @Authorized('roles') roles: UserRole[],
   ): Promise<void> {
     const post = await this.postsService.findOne(id);
-
-    if (
-      post.userId !== +userId ||
-      !roles.includes(UserRole.Moderator) ||
-      !roles.includes(UserRole.Admin)
-    ) {
+    if (!canUserModifyPost(+userId, post.userId, roles)) {
       throw new ForbiddenException('Вы не можете удалить этот пост');
     }
-
     return this.postsService.remove(id);
   }
 }

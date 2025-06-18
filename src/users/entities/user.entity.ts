@@ -99,6 +99,11 @@ export class User {
   })
   updatedAt: Date;
 
-  @Column({ nullable: true, type: 'enum', enum: AuthMethod })
+  @Column({
+    nullable: true,
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.User,
+  })
   roles?: UserRole[];
 }
