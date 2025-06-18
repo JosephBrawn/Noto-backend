@@ -10,6 +10,7 @@ import {
 
 import { Account } from '@/accounts/entities/account.entity';
 import { VALIDATION } from '@/libs/common/constants/validation';
+import { Post } from '@/posts/entities/post.entity';
 
 export enum AuthMethod {
   CREDENTIALS = 'credentials',
@@ -81,6 +82,9 @@ export class User {
   @OneToMany(() => Account, (account) => account.user)
   accounts: Account[];
 
+  @OneToMany(() => Post, (post) => post.user) // <-- исправлено тут
+  posts?: Post[];
+
   @CreateDateColumn({
     type: 'timestamp',
     name: 'created_at',
@@ -94,4 +98,7 @@ export class User {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @Column({ nullable: true, type: 'enum', enum: AuthMethod })
+  roles?: UserRole[];
 }

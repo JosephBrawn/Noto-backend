@@ -37,13 +37,13 @@ export class AuthService {
       false,
     );
 
-    return await this.saveSession(req, newUser);
+    return this.saveSession(req, newUser);
   }
 
   public async login(req: Request, userDto: LoginDto): Promise<User> {
     const user = await this.usersService.findByEmail(userDto.email);
 
-    if (!user?.password) {
+    if (!user) {
       throw new NotFoundException(
         'Пользователь не найден! Пожалуйста проверьте введенные данные!',
       );

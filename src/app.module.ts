@@ -8,6 +8,7 @@ import { IS_DEV_ENV } from '@/libs/common/utils/is-dev-util';
 import { AuthModule } from './auth/auth.module';
 import AppDataSource from './database/data-source/typeorm';
 import { UsersModule } from './users/users.module';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UsersModule } from './users/users.module';
     }),
     AuthModule,
     UsersModule,
+    PostsModule,
   ],
 })
 export class AppModule {}

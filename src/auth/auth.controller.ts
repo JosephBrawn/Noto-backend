@@ -7,11 +7,13 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
-import { User } from '@/users/entities/user.entity';
 import { Request, Response } from 'express';
+
+import { User } from '@/users/entities/user.entity';
+
+import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Controller('auth')
 export class AuthController {
