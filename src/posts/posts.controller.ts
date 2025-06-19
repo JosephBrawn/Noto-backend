@@ -31,7 +31,6 @@ export class PostsController {
     @Authorized('roles') roles: UserRole[],
     @Body() createPostDto: CreatePostDto,
   ): Promise<PostEntity> {
-
     return this.postsService.create(createPostDto, +userId);
   }
 

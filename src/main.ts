@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { RedisStore } from 'connect-redis';
@@ -12,6 +12,7 @@ import { ms } from '@/libs/common/utils/ms.util';
 import { parseBoolean } from '@/libs/common/utils/parse-boolean.until';
 
 import { AppModule } from './app.module';
+import { S3Service } from '@/s3/s3.service';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 async function bootstrap() {
@@ -22,6 +23,13 @@ async function bootstrap() {
   const redisClient = createClient({
     url: redisUrl,
   });
+  const logger = new Logger('Bootstrap');
+  const s3Service = app.get(S3Service);
+  const isConnected = await s3Service.checkConnection();
+  // // if (!isConnected) {
+  // //   logger.error('Cannot connect to S3/MinIO');
+  // //   process.exit(1);
+  // // }
 
   await redisClient.connect();
 

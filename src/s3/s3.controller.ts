@@ -16,7 +16,7 @@ export class S3Controller {
   constructor(private readonly s3Service: S3Service) {}
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('files'))
   async uploadFile(
     @UploadedFile() file: Express.Multer.File | undefined,
   ): Promise<UploadResponseDto> {
