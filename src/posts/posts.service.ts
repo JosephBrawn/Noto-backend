@@ -36,7 +36,7 @@ export class PostsService {
       },
       take: limit,
       skip: offset,
-      order: { createdAt: 'DESC' },
+      order: { updatedAt: 'DESC' },
     });
   }
 
