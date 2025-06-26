@@ -106,12 +106,12 @@ export class User {
     default: UserRole.User,
   })
   roles?: UserRole[];
-
-  @Column({
-    type: 'varchar',
-    length: 100,
-    nullable: true,
-    name: 'google_id',
-  })
-  googleId?: string;
+  //
+  // @Column({
+  //   type: 'varchar',
+  //   length: 100,
+  //   nullable: true,
+  //   name: 'google_id',
+  // })
+  // googleId?: string;
 }

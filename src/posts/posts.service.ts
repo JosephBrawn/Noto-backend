@@ -26,8 +26,18 @@ export class PostsService {
     return this.postRepository.save(post);
   }
 
-  async findAll(): Promise<Post[]> {
-    return this.postRepository.find({ relations: ['user'] });
+  async findAll(params?: { limit?: number; offset?: number }): Promise<Post[]> {
+    const limit = params?.limit ?? 5;
+    const offset = params?.offset ?? 0;
+
+    return this.postRepository.find({
+      relations: {
+        user: true,
+      },
+      take: limit,
+      skip: offset,
+      order: { createdAt: 'DESC' },
+    });
   }
 
   async findOne(id: number, withUser = true): Promise<Post> {

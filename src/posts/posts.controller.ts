@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 
 import { Authorization } from '@/auth/decorators/auth.decorator';
@@ -24,19 +25,23 @@ import { PostsService } from './posts.service';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Authorization(UserRole.User, UserRole.Admin, UserRole.Moderator)
-  @Post()
+  @Authorization()
+  @Post('create')
   async create(
     @Authorized('id') userId: string,
-    @Authorized('roles') roles: UserRole[],
     @Body() createPostDto: CreatePostDto,
   ): Promise<PostEntity> {
     return this.postsService.create(createPostDto, +userId);
   }
 
   @Get()
-  async findAll(): Promise<PostEntity[]> {
-    return this.postsService.findAll();
+  async findAll(
+    @Query('limit') limit?: string,
+    @Query('offset') offset?: string,
+  ): Promise<PostEntity[]> {
+    const limitNum = limit ? parseInt(limit, 10) : 5;
+    const offsetNum = offset ? parseInt(offset, 10) : 0;
+    return this.postsService.findAll({ limit: limitNum, offset: offsetNum });
   }
 
   @Get(':id')
