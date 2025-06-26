@@ -26,7 +26,7 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Authorization()
-  @Post('create')
+  @Post()
   async create(
     @Authorized('id') userId: string,
     @Body() createPostDto: CreatePostDto,
