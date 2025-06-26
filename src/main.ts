@@ -2,6 +2,7 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { RedisStore } from 'connect-redis';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
@@ -10,13 +11,13 @@ import { createClient } from 'redis';
 import type { StringValue } from '@/libs/common/utils/ms.util';
 import { ms } from '@/libs/common/utils/ms.util';
 import { parseBoolean } from '@/libs/common/utils/parse-boolean.until';
+import { S3Service } from '@/s3/s3.service';
 
 import { AppModule } from './app.module';
-import { S3Service } from '@/s3/s3.service';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const config = app.get(ConfigService);
   const redisUrl = `redis://${config.getOrThrow<string>('REDIS_USER')}:${config.getOrThrow<string>('REDIS_PASSWORD')}@${config.getOrThrow<string>('REDIS_HOST')}:${config.getOrThrow<string>('REDIS_PORT')}`;
@@ -32,6 +33,8 @@ async function bootstrap() {
   // // }
 
   await redisClient.connect();
+
+  app.set('trust proxy', true);
 
   app.use(cookieParser(config.getOrThrow<string>('COOKIES_SECRET')));
 
